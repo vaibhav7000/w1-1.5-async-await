@@ -64,3 +64,8 @@ function onError(error) {
 }
 
 customReadFilePromiseVersion().then(onDone).catch(onError);
+
+// The Promise class always require the function as an argument that function should take 2 parameters name them anything and then using .then() and .catch() we will map that vairbles with the callbacks and hence "Promise" makes easy, pretty to pass the callbacks to the async function
+
+// .then(callback) -> this gets mapped with the resolve, when the Promise gets resolved, the resolved value will be shown inside the Promise, when we print the promise
+// .catch(callback) -> this gets mapped with the reject, when the Promise gets rejected, the rejected value will be shown, when we print the promise
