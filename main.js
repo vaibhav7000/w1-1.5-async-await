@@ -38,7 +38,7 @@ customReadFile(function(err,data) {
     console.log(data);
 })
 
-// "Promises" -> provides better way of writing the async functions (will make it easy passing of the callback to the async functions) => now you have to wrap the async function inside the the Promise class
+// "Promises" -> provides better way of writing the asynchronous functions (will make it easy passing of the callback to the asynchrnous functions) => now you have to wrap the asynchronous function inside the the Promise class
 
 function customReadFilePromiseVersion() {
     // returns promise object and on that we will use .then and .catch to map the resolve and reject variable with the callbacks that we want to pass to the async function
@@ -69,3 +69,63 @@ customReadFilePromiseVersion().then(onDone).catch(onError);
 
 // .then(callback) -> this gets mapped with the resolve, when the Promise gets resolved, the resolved value will be shown inside the Promise, when we print the promise
 // .catch(callback) -> this gets mapped with the reject, when the Promise gets rejected, the rejected value will be shown, when we print the promise
+
+// (async and await) is alternative of providing callbacks(the code of the callback is put after function call) to the Promise, more cleaner than the .then and .catch syntax
+
+// async and await should only be used only with Promise, the value that we passed to resolve that we can get using the await avoid mapping the resolve with .then
+// we can use await wrapped inside the async function syntax (normal function for us but just with the async keyword)
+
+function setTimeoutPromise(printString) {
+    // wrapping the asynchronous function (setTimeout) inside the Promise class
+    return new Promise(function(resolve,reject) {
+        setTimeout(function() {
+            resolve("The value from the asynchronous function " + printString);
+        }, 5000);
+    })
+}
+
+
+// setTimeoutPromise("How is the situation in Amritsar??").then(function(data) {
+//     console.log(data);
+// }) instead of passing the callback using .then we will use async await syntax and gets the value that asynchronous function passes to it
+
+async function wrapperSetTimeout(printString) {
+    const value = await setTimeoutPromise(printString);
+
+    console.log(value);
+
+    // async function also returns us promise that will be resolved if the function returns, if function throws error => reject will happen
+}
+
+wrapperSetTimeout("How is the Situation in amritsar??");
+
+// fetch is also a wrapper around the http request function that returns us promise and on that we will use either .then and .catch or async await syntax (in this case we does not have to provide a callback instead get the value using await), with async await we will be using try and catch. try for resolve and catch for reject
+
+// created a wrapper for using the Promised asynchronous function 
+async function getJsonData(url) {
+    // created a wrapper that returns Promise object
+    try {
+        const response = await fetch(url); // await gets the data that is passed to the resolve function
+        const data = await response.json(); // now we actually gets the data
+        
+        // if the fetch calls reject than we will get back to catch with error 
+        return data;
+    } catch(err) {
+        console.log("error cames from the getJsonData");
+        throw err
+    }
+}
+
+
+async function requestForProducts(url) {
+    try {
+        const data = await getJsonData(url);
+        console.log(data)
+        console.log("update the UI")
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+requestForProducts("https://fakestoreapi.com/products");
+console.log("called requestForProducts function")
